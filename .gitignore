@@ -1,0 +1,6 @@
+.classpath
+.project
+.idea/*
+out/*
+.DS_Store
+sounds/*

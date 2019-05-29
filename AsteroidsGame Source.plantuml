@@ -1,0 +1,223 @@
+@startuml
+
+title __ASTEROIDSGAME SOURCE's Class Diagram__\n
+
+  package  {
+    class Asteroids {
+        {static} - serialVersionUID : long
+        ~ copyName : String
+        ~ copyVers : String
+        ~ copyInfo : String
+        ~ copyLink : String
+        ~ copyText : String
+        ~ loadThread : Thread
+        ~ loopThread : Thread
+        {static} ~ DELAY : int
+        {static} ~ FPS : int
+        {static} ~ MAX_SHOTS : int
+        {static} ~ MAX_ROCKS : int
+        {static} ~ MAX_SCRAP : int
+        {static} ~ SCRAP_COUNT : int
+        {static} ~ HYPER_COUNT : int
+        {static} ~ MISSLE_COUNT : int
+        {static} ~ STORM_PAUSE : int
+        {static} ~ MIN_ROCK_SIDES : int
+        {static} ~ MAX_ROCK_SIDES : int
+        {static} ~ MIN_ROCK_SIZE : int
+        {static} ~ MAX_ROCK_SIZE : int
+        {static} ~ MIN_ROCK_SPEED : double
+        {static} ~ MAX_ROCK_SPEED : double
+        {static} ~ MAX_ROCK_SPIN : double
+        {static} ~ MAX_SHIPS : int
+        {static} ~ UFO_PASSES : int
+        {static} ~ SHIP_ANGLE_STEP : double
+        {static} ~ SHIP_SPEED_STEP : double
+        {static} ~ MAX_SHIP_SPEED : double
+        {static} ~ FIRE_DELAY : int
+        {static} ~ MISSLE_PROBABILITY : double
+        {static} ~ BIG_POINTS : int
+        {static} ~ SMALL_POINTS : int
+        {static} ~ UFO_POINTS : int
+        {static} ~ MISSLE_POINTS : int
+        {static} ~ NEW_SHIP_POINTS : int
+        {static} ~ NEW_UFO_POINTS : int
+        ~ numStars : int
+        ~ stars : Point[]
+        ~ score : int
+        ~ highScore : int
+        ~ newShipScore : int
+        ~ newUfoScore : int
+        ~ loaded : boolean
+        ~ paused : boolean
+        ~ playing : boolean
+        ~ sound : boolean
+        ~ detail : boolean
+        ~ left : boolean
+        ~ right : boolean
+        ~ up : boolean
+        ~ down : boolean
+        ~ photons : AsteroidsSprite[]
+        ~ asteroids : AsteroidsSprite[]
+        ~ explosions : AsteroidsSprite[]
+        ~ shipsLeft : int
+        ~ shipCounter : int
+        ~ hyperCounter : int
+        ~ photonIndex : int
+        ~ photonTime : long
+        ~ ufoPassesLeft : int
+        ~ ufoCounter : int
+        ~ missleCounter : int
+        ~ asteroidIsSmall : boolean[]
+        ~ asteroidsCounter : int
+        ~ asteroidsSpeed : double
+        ~ asteroidsLeft : int
+        ~ explosionCounter : int[]
+        ~ explosionIndex : int
+        ~ crashSound : Clip
+        ~ explosionSound : Clip
+        ~ fireSound : Clip
+        ~ missleSound : Clip
+        ~ saucerSound : Clip
+        ~ thrustersSound : Clip
+        ~ warpSound : Clip
+        ~ thrustersPlaying : boolean
+        ~ saucerPlaying : boolean
+        ~ misslePlaying : boolean
+        ~ clipTotal : int
+        ~ clipsLoaded : int
+        ~ offDimension : Dimension
+        ~ offImage : Image
+        ~ offGraphics : Graphics
+        ~ font : Font
+        ~ fm : FontMetrics
+        ~ fontWidth : int
+        ~ fontHeight : int
+        + getAppletInfo()
+        + init()
+        + initGame()
+        + endGame()
+        + start()
+        + stop()
+        + run()
+        {static} + main()
+        + loadSounds()
+        + initShip()
+        + updateShip()
+        + stopShip()
+        + initPhotons()
+        + updatePhotons()
+        + initUfo()
+        + updateUfo()
+        + stopUfo()
+        + initMissle()
+        + updateMissle()
+        + guideMissle()
+        + stopMissle()
+        + initAsteroids()
+        + initSmallAsteroids()
+        + updateAsteroids()
+        + initExplosions()
+        + explode()
+        + updateExplosions()
+        + keyPressed()
+        + keyReleased()
+        + keyTyped()
+        + update()
+        + paint()
+    }
+  }
+  
+
+  package  {
+    class AsteroidsSprite {
+        {static} ~ width : int
+        {static} ~ height : int
+        ~ shape : Polygon
+        ~ active : boolean
+        ~ angle : double
+        ~ deltaAngle : double
+        ~ x : double
+        ~ y : double
+        ~ deltaX : double
+        ~ deltaY : double
+        ~ sprite : Polygon
+        + AsteroidsSprite()
+        + advance()
+        + render()
+        + isColliding()
+    }
+  }
+  
+
+  Asteroids -up-|> Runnable
+  Asteroids -up-|> KeyListener
+  Asteroids -up-|> JPanel
+  Asteroids o-- AsteroidsSprite : ship
+  Asteroids o-- AsteroidsSprite : fwdThruster
+  Asteroids o-- AsteroidsSprite : revThruster
+  Asteroids o-- AsteroidsSprite : ufo
+  Asteroids o-- AsteroidsSprite : missle
+  AccessibleJPanel -up-|> AccessibleJComponent
+  AccessibleFocusHandler -up-|> FocusListener
+  AccessibleContainerHandler -up-|> ContainerListener
+  AccessibleContainerHandler -up-|> ContainerListener
+  AccessibleContainerHandler -up-|> Serializable
+  AccessibleAWTFocusHandler -up-|> FocusListener
+  AccessibleAWTFocusHandler -up-|> Serializable
+  AccessibleAWTComponentHandler -up-|> ComponentListener
+  AccessibleAWTComponentHandler -up-|> Serializable
+  ReadObjectCallback -up-|> ObjectInputValidation
+  AccessibleJComponent -up-|> AccessibleExtendedComponent
+  AccessibleJComponent -up-|> AccessibleAWTContainer
+  AccessibleJComponent +-down- AccessibleFocusHandler
+  AccessibleJComponent +-down- AccessibleContainerHandler
+  AccessibleFocusHandler -up-|> FocusListener
+  AccessibleContainerHandler -up-|> ContainerListener
+  AccessibleContainerHandler -up-|> ContainerListener
+  AccessibleContainerHandler -up-|> Serializable
+  AccessibleAWTFocusHandler -up-|> FocusListener
+  AccessibleAWTFocusHandler -up-|> Serializable
+  AccessibleAWTComponentHandler -up-|> ComponentListener
+  AccessibleAWTComponentHandler -up-|> Serializable
+  KeyboardState -up-|> Serializable
+  ActionStandin -up-|> Action
+  AccessibleAWTContainer -up-|> AccessibleAWTComponent
+  AccessibleAWTContainer +-down- AccessibleContainerHandler
+  AccessibleContainerHandler -up-|> ContainerListener
+  AccessibleContainerHandler -up-|> Serializable
+  AccessibleAWTFocusHandler -up-|> FocusListener
+  AccessibleAWTFocusHandler -up-|> Serializable
+  AccessibleAWTComponentHandler -up-|> ComponentListener
+  AccessibleAWTComponentHandler -up-|> Serializable
+  WakingRunnable -up-|> Runnable
+  DropTargetEventTargetFilter -up-|> EventTargetFilter
+  MouseEventTargetFilter -up-|> EventTargetFilter
+  AccessibleAWTComponent -up-|> Serializable
+  AccessibleAWTComponent -up-|> AccessibleComponent
+  AccessibleAWTComponent -up-|> AccessibleContext
+  AccessibleAWTComponent +-down- AccessibleAWTFocusHandler
+  AccessibleAWTComponent +-down- AccessibleAWTComponentHandler
+  AccessibleAWTFocusHandler -up-|> FocusListener
+  AccessibleAWTFocusHandler -up-|> Serializable
+  AccessibleAWTComponentHandler -up-|> ComponentListener
+  AccessibleAWTComponentHandler -up-|> Serializable
+  DummyRequestFocusController -up-|> RequestFocusController
+  SingleBufferStrategy -up-|> BufferStrategy
+  BltSubRegionBufferStrategy -up-|> SubRegionShowable
+  BltSubRegionBufferStrategy -up-|> BltBufferStrategy
+  FlipSubRegionBufferStrategy -up-|> SubRegionShowable
+  FlipSubRegionBufferStrategy -up-|> FlipBufferStrategy
+  BltBufferStrategy -up-|> BufferStrategy
+  FlipBufferStrategy -up-|> BufferStrategy
+  ProxyCapabilities -up-|> ExtendedBufferCapabilities
+  FlipContents -up-|> AttributeValue
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml
