@@ -39,6 +39,9 @@
 
 ******************************************************************************/
 
+import src.model.SoundEnum;
+import src.model.Sounds;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.sound.sampled.AudioSystem;
@@ -296,26 +299,11 @@ public class Asteroids extends JPanel implements Runnable, KeyListener {
   int[] explosionCounter = new int[MAX_SCRAP];  // Time counters for explosions.
   int   explosionIndex;                         // Next available explosion sprite.
 
-  // Sound clips.
-
-  Clip crashSound;
-  Clip explosionSound;
-  Clip fireSound;
-  Clip missleSound;
-  Clip saucerSound;
-  Clip thrustersSound;
-  Clip warpSound;
-
   // Flags for looping sound clips.
 
   boolean thrustersPlaying;
   boolean saucerPlaying;
   boolean misslePlaying;
-
-  // Counter and total used to track the loading of the sound clips.
-
-  int clipTotal   = 0;
-  int clipsLoaded = 0;
 
   // Off screen image.
 
@@ -520,7 +508,7 @@ public class Asteroids extends JPanel implements Runnable, KeyListener {
     // Run thread for loading sounds.
 
     if (!loaded && Thread.currentThread() == loadThread) {
-      loadSounds();
+      Sounds.init();
       loaded = true;
       try {
 		loadThread.join();
@@ -607,61 +595,6 @@ public class Asteroids extends JPanel implements Runnable, KeyListener {
 	 
      myApp.start();
   }
-  
-  public void loadSounds() {
-
-    // Load all sound clips by playing and immediately stopping them. Update
-    // counter and total for display.
-
-    try {
-      crashSound = AudioSystem.getClip();
-      crashSound.open(AudioSystem.getAudioInputStream(new File("sounds/crash.wav")));
-      clipTotal++;
-      
-      explosionSound = AudioSystem.getClip();
-      explosionSound.open(AudioSystem.getAudioInputStream(new File("sounds/explosion.wav")));
-      clipTotal++;
-      
-      fireSound = AudioSystem.getClip();
-      fireSound.open(AudioSystem.getAudioInputStream(new File("sounds/fire.wav")));
-      clipTotal++;
-      
-      missleSound = AudioSystem.getClip();
-      missleSound.open(AudioSystem.getAudioInputStream(new File("sounds/missle.wav")));
-      clipTotal++;
-      
-      saucerSound = AudioSystem.getClip();
-      saucerSound.open(AudioSystem.getAudioInputStream(new File("sounds/saucer.wav")));
-      clipTotal++;
-      
-      thrustersSound = AudioSystem.getClip();
-      thrustersSound.open(AudioSystem.getAudioInputStream(new File("sounds/thrusters.wav")));
-      clipTotal++;
-      
-      warpSound = AudioSystem.getClip();
-      warpSound.open(AudioSystem.getAudioInputStream(new File("warp.wav")));
-      clipTotal++;
-    }
-    catch (Exception e) {}
-
-      try {
-      crashSound.start();     crashSound.stop();     clipsLoaded++;
-      repaint(); Thread.sleep(DELAY);
-      explosionSound.start(); explosionSound.stop(); clipsLoaded++;
-      repaint(); Thread.sleep(DELAY);
-      fireSound.start();      fireSound.stop();      clipsLoaded++;
-      repaint(); Thread.sleep(DELAY);
-      missleSound.start();    missleSound.stop();    clipsLoaded++;
-      repaint(); Thread.sleep(DELAY);
-      saucerSound.start();    saucerSound.stop();    clipsLoaded++;
-      repaint(); Thread.sleep(DELAY);
-      thrustersSound.start(); thrustersSound.stop(); clipsLoaded++;
-      repaint(); Thread.sleep(DELAY);
-      warpSound.start();      warpSound.stop();      clipsLoaded++;
-      repaint(); Thread.sleep(DELAY);
-    }
-    catch (InterruptedException e) {}
-  }
 
   public void initShip() {
 
@@ -686,8 +619,9 @@ public class Asteroids extends JPanel implements Runnable, KeyListener {
     revThruster.y = ship.y;
     revThruster.angle = ship.angle;
     revThruster.render();
-    	if (loaded)
-    		thrustersSound.stop();
+    	if (loaded) {
+          Sounds.stopClip(SoundEnum.THRUSTERS);
+        }
     thrustersPlaying = false;
     hyperCounter = 0;
   }
@@ -784,8 +718,9 @@ public class Asteroids extends JPanel implements Runnable, KeyListener {
     shipCounter = SCRAP_COUNT;
     if (shipsLeft > 0)
       shipsLeft--;
-		if (loaded)
-			thrustersSound.stop();
+		if (loaded) {
+		  Sounds.stopClip(SoundEnum.THRUSTERS);
+        }
     thrustersPlaying = false;
   }
 
@@ -836,9 +771,7 @@ public class Asteroids extends JPanel implements Runnable, KeyListener {
     saucerPlaying = true;
 		
 		  if (sound) {
-			  saucerSound.setFramePosition(0);
-			  saucerSound.start();
-			  saucerSound.loop(Clip.LOOP_CONTINUOUSLY);
+		      Sounds.loop(SoundEnum.SAUCER);
 		  }
 		 
     ufoCounter = (int) Math.abs(AsteroidsSprite.width / ufo.deltaX);
@@ -864,8 +797,7 @@ public class Asteroids extends JPanel implements Runnable, KeyListener {
         for (i = 0; i < MAX_SHOTS; i++)
           if (photons[i].active && ufo.isColliding(photons[i])) {
             if (sound) {
-              crashSound.setFramePosition(0);
-              crashSound.start();  
+              Sounds.startClip(SoundEnum.CRASH);
             }
             explode(ufo);
             stopUfo();
@@ -890,8 +822,9 @@ public class Asteroids extends JPanel implements Runnable, KeyListener {
     ufo.active = false;
     ufoCounter = 0;
     ufoPassesLeft = 0;
-		if (loaded) 
-			saucerSound.stop();
+		if (loaded) {
+		  Sounds.stopClip(SoundEnum.SAUCER);
+        }
     saucerPlaying = false;
   }
 
@@ -907,8 +840,7 @@ public class Asteroids extends JPanel implements Runnable, KeyListener {
     missle.render();
     missleCounter = MISSLE_COUNT;
 		 if (sound) {
-			 missleSound.start();
-			 missleSound.loop(Clip.LOOP_CONTINUOUSLY);
+		   Sounds.startClip(SoundEnum.MISSILE);
 		 }
     misslePlaying = true;
   }
@@ -930,8 +862,7 @@ public class Asteroids extends JPanel implements Runnable, KeyListener {
         for (i = 0; i < MAX_SHOTS; i++)
           if (photons[i].active && missle.isColliding(photons[i])) {
 			 if (sound) {
-				 crashSound.setFramePosition(0); 
-				 crashSound.start();
+			   Sounds.startClip(SoundEnum.CRASH);
 			 }
             explode(missle);
             stopMissle();
@@ -940,8 +871,7 @@ public class Asteroids extends JPanel implements Runnable, KeyListener {
         if (missle.active && ship.active &&
             hyperCounter <= 0 && ship.isColliding(missle)) {
 				if (sound) {
-					crashSound.setFramePosition(0);
-					crashSound.start();
+				  Sounds.startClip(SoundEnum.CRASH);
 				}
           explode(ship);
           stopShip();
@@ -993,8 +923,9 @@ public class Asteroids extends JPanel implements Runnable, KeyListener {
 
     missle.active = false;
     missleCounter = 0;
-		if (loaded) 
-			missleSound.stop();
+		if (loaded) {
+		  Sounds.stopClip(SoundEnum.MISSILE);
+        }
     misslePlaying = false;
   }
 
@@ -1123,8 +1054,7 @@ public class Asteroids extends JPanel implements Runnable, KeyListener {
             asteroids[i].active = false;
             photons[j].active = false;
 				if (sound) {
-					explosionSound.setFramePosition(0);
-					explosionSound.start();
+				  Sounds.startClip(SoundEnum.EXPLOSION);
 				}
 						 
             explode(asteroids[i]);
@@ -1141,8 +1071,7 @@ public class Asteroids extends JPanel implements Runnable, KeyListener {
         if (ship.active && hyperCounter <= 0 &&
             asteroids[i].active && asteroids[i].isColliding(ship)) {
 				if (sound) {
-					crashSound.setFramePosition(0);
-					crashSound.start();
+				  Sounds.startClip(SoundEnum.CRASH);
 				}
 					
           explode(ship);
@@ -1237,9 +1166,7 @@ public class Asteroids extends JPanel implements Runnable, KeyListener {
 
     if ((up || down) && ship.active && !thrustersPlaying) {
     	if (sound && !paused) {
-    		thrustersSound.setFramePosition(0);
-    		thrustersSound.start(); 
-    		thrustersSound.loop(Clip.LOOP_CONTINUOUSLY);
+    	  Sounds.loop(SoundEnum.THRUSTERS);
     	}
 			
       thrustersPlaying = true;
@@ -1249,8 +1176,7 @@ public class Asteroids extends JPanel implements Runnable, KeyListener {
 
     if (e.getKeyChar() == ' ' && ship.active) {
 		if (sound & !paused) {
-			fireSound.setFramePosition(0);
-			fireSound.start();
+		  Sounds.startClip(SoundEnum.FIRE);
 		}
       photonTime = System.currentTimeMillis();
       photonIndex++;
@@ -1274,9 +1200,9 @@ public class Asteroids extends JPanel implements Runnable, KeyListener {
       ship.x = Math.random() * AsteroidsSprite.width;
       ship.y = Math.random() * AsteroidsSprite.height;
       hyperCounter = HYPER_COUNT;
-		if (sound & !paused) 
-			warpSound.setFramePosition(0);
-			warpSound.start();
+		if (sound & !paused) {
+		  Sounds.startClip(SoundEnum.WARP);
+        }
     }
 
     // 'P' key: toggle pause mode and start or stop any active looping sound
@@ -1285,30 +1211,27 @@ public class Asteroids extends JPanel implements Runnable, KeyListener {
     if (c == 'p') {
       if (paused) {
 			if (sound && misslePlaying) {
-				missleSound.setFramePosition(0);
-				missleSound.start(); 
-				missleSound.loop(Clip.LOOP_CONTINUOUSLY);
+			  Sounds.loop(SoundEnum.MISSILE);
 			}
 			if (sound && saucerPlaying) {
-				saucerSound.setFramePosition(0);
-				saucerSound.start(); 
-				saucerSound.loop(Clip.LOOP_CONTINUOUSLY);
+			  Sounds.loop(SoundEnum.SAUCER);
 			}
 			if (sound && thrustersPlaying) {
-				thrustersSound.setFramePosition(0);
-				thrustersSound.start();
-				thrustersSound.loop(Clip.LOOP_CONTINUOUSLY);
+			  Sounds.loop(SoundEnum.THRUSTERS);
 			}
 				 
       }
       else {
 				
-				  if (misslePlaying) 
-					  missleSound.stop(); 
-				  if (saucerPlaying) 
-					  saucerSound.stop();
-				  if (thrustersPlaying) 
-					  thrustersSound.stop();
+				  if (misslePlaying) {
+                    Sounds.stopClip(SoundEnum.MISSILE);
+                  }
+				  if (saucerPlaying) {
+				    Sounds.stopClip(SoundEnum.SAUCER);
+                  }
+				  if (thrustersPlaying) {
+				    Sounds.stopClip(SoundEnum.THRUSTERS);
+                  }
       }
       paused = !paused;
     }
@@ -1317,29 +1240,17 @@ public class Asteroids extends JPanel implements Runnable, KeyListener {
 
     if (c == 'm' && loaded) {
       if (sound) {
-        crashSound.stop();
-        explosionSound.stop();
-        fireSound.stop();
-        missleSound.stop();
-        saucerSound.stop();
-        thrustersSound.stop();
-        warpSound.stop();
+        Sounds.stopAll();
       }
       else {
         if (misslePlaying && !paused) {
-          missleSound.setFramePosition(0);
-          missleSound.start();
-          missleSound.loop(Clip.LOOP_CONTINUOUSLY);
+          Sounds.loop(SoundEnum.MISSILE);
         }
         if (saucerPlaying && !paused) {
-          saucerSound.setFramePosition(0);
-          saucerSound.start();
-          saucerSound.loop(Clip.LOOP_CONTINUOUSLY);
+          Sounds.loop(SoundEnum.SAUCER);
         }
         if (thrustersPlaying && !paused) {
-          thrustersSound.setFramePosition(0);
-          thrustersSound.start(); 
-          thrustersSound.loop(Clip.LOOP_CONTINUOUSLY);
+          Sounds.loop(SoundEnum.THRUSTERS);
         }
       }
       sound = !sound;
@@ -1381,7 +1292,7 @@ public class Asteroids extends JPanel implements Runnable, KeyListener {
       down = false;
 
     if (!up && !down && thrustersPlaying) {
-      thrustersSound.stop(); 
+      Sounds.stopClip(SoundEnum.THRUSTERS);
       thrustersPlaying = false;
     }
   }
@@ -1537,8 +1448,8 @@ public class Asteroids extends JPanel implements Runnable, KeyListener {
         offGraphics.setColor(Color.black);
           offGraphics.fillRect(x, y, w, h);
         offGraphics.setColor(Color.gray);
-        if (clipTotal > 0)
-          offGraphics.fillRect(x, y, (int) (w * clipsLoaded / clipTotal), h);
+        if (Sounds.getClipTotal() > 0)
+          offGraphics.fillRect(x, y, (int) (w * Sounds.getClipsLoaded() / Sounds.getClipTotal()), h);
         offGraphics.setColor(Color.white);
         offGraphics.drawRect(x, y, w, h);
         offGraphics.drawString(s, x + 2 * fontWidth, y + fm.getMaxAscent());
