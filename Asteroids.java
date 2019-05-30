@@ -44,10 +44,7 @@ import src.model.Sounds;
 
 import java.awt.*;
 import java.awt.event.*;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.swing.*;
-import java.io.File;
 
 /******************************************************************************
   The AsteroidsSprite class defines a game object, including it's shape,
