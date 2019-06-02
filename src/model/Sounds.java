@@ -22,6 +22,11 @@ public final class Sounds {
     private static int clipTotal   = 0;
     private static int clipsLoaded = 0;
 
+    // Flags for looping sound clips.
+    private static boolean thrustersPlaying;
+    private static boolean saucerPlaying;
+    private static boolean misslePlaying;
+
 
     /**
      * Private constructor which can only be called from within this class.
@@ -101,5 +106,29 @@ public final class Sounds {
 
     public static int getClipsLoaded() {
         return clipsLoaded;
+    }
+
+    public static boolean isThrustersPlaying() {
+        return thrustersPlaying;
+    }
+
+    public static void setThrustersPlaying(boolean thrustersPlaying) {
+        Sounds.thrustersPlaying = thrustersPlaying;
+    }
+
+    public static boolean isSaucerPlaying() {
+        return saucerPlaying;
+    }
+
+    public static void setSaucerPlaying(boolean saucerPlaying) {
+        Sounds.saucerPlaying = saucerPlaying;
+    }
+
+    public static boolean isMisslePlaying() {
+        return misslePlaying;
+    }
+
+    public static void setMisslePlaying(boolean misslePlaying) {
+        Sounds.misslePlaying = misslePlaying;
     }
 }

@@ -2,6 +2,9 @@ package src.model;
 
 public class Missile extends AsteroidsSprite {
 
+    // Missle data.
+    private static int missleCounter;    // Counter for life of missle.
+
     public Missile() {
         super();
 

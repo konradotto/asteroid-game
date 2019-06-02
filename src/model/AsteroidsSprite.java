@@ -10,10 +10,10 @@ import java.awt.*;
 public class AsteroidsSprite {
 
     // Fields:
-    // TODO: Make all these fields private
-    public static int width;          // Dimensions of the graphics area.
-    public static int height;
+    private static int width;          // Dimensions of the graphics area.
+    private static int height;
 
+    // TODO: Make all these fields private
     public Polygon shape;             // Base sprite shape, centered at the origin (0,0).
     public boolean active;            // Active flag.
     public double  angle;             // Current angle of rotation.
@@ -165,5 +165,21 @@ public class AsteroidsSprite {
 
     public void setDeltaY(double deltaY) {
         this.deltaY = deltaY;
+    }
+
+    public static int getWidth() {
+        return width;
+    }
+
+    public static void setWidth(int newWidth) {
+        width = newWidth;
+    }
+
+    public static int getHeight() {
+        return height;
+    }
+
+    public static void setHeight(int newHeight) {
+        height = newHeight;
     }
 }

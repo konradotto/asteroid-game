@@ -10,4 +10,11 @@ public class FwdThruster extends AsteroidsSprite {
         this.addPoint(0, 26);
         this.addPoint(3, 16);
     }
+
+    protected void init(SpaceShip ship) {
+        this.x = ship.x;
+        this.y = ship.y;
+        this.angle = ship.angle;
+        render();
+    }
 }
