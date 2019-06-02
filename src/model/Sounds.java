@@ -16,13 +16,6 @@ public final class Sounds {
     private static Sounds sounds_instance = null;
 
     // Sound clips - used to load and store the sounds
-    /*private static Clip crashSound;
-    private static Clip explosionSound;
-    private static Clip fireSound;
-    private static Clip missileSound;
-    private static Clip saucerSound;
-    private static Clip thrustersSound;
-    private static Clip warpSound;*/
     private static List<Clip> clips;
 
     // Counter and total used to track the loading of the sound clips.
@@ -52,34 +45,6 @@ public final class Sounds {
                 clips.add(clip);
                 clipTotal++;
             }
-            /*
-            crashSound = AudioSystem.getClip();
-            crashSound.open(AudioSystem.getAudioInputStream(new File("sounds/crash.wav")));
-            clipTotal++;
-
-            explosionSound = AudioSystem.getClip();
-            explosionSound.open(AudioSystem.getAudioInputStream(new File("sounds/explosion.wav")));
-            clipTotal++;
-
-            fireSound = AudioSystem.getClip();
-            fireSound.open(AudioSystem.getAudioInputStream(new File("sounds/fire.wav")));
-            clipTotal++;
-
-            missileSound = AudioSystem.getClip();
-            missileSound.open(AudioSystem.getAudioInputStream(new File("sounds/missle.wav")));
-            clipTotal++;
-
-            saucerSound = AudioSystem.getClip();
-            saucerSound.open(AudioSystem.getAudioInputStream(new File("sounds/saucer.wav")));
-            clipTotal++;
-
-            thrustersSound = AudioSystem.getClip();
-            thrustersSound.open(AudioSystem.getAudioInputStream(new File("sounds/thrusters.wav")));
-            clipTotal++;
-
-            warpSound = AudioSystem.getClip();
-            warpSound.open(AudioSystem.getAudioInputStream(new File("warp.wav")));
-            clipTotal++;*/
         } catch (Exception e) {
             System.err.println("Exception loading sounds from their sources.");
             e.printStackTrace();
@@ -93,15 +58,6 @@ public final class Sounds {
                 clip.stop();
                 clipsLoaded++;
             }
-            /*
-            crashSound.start();     crashSound.stop();     clipsLoaded++;
-            explosionSound.start(); explosionSound.stop(); clipsLoaded++;
-            fireSound.start();      fireSound.stop();      clipsLoaded++;
-            missileSound.start();    missileSound.stop();    clipsLoaded++;
-            saucerSound.start();    saucerSound.stop();    clipsLoaded++;
-            thrustersSound.start(); thrustersSound.stop(); clipsLoaded++;
-            warpSound.start();      warpSound.stop();      clipsLoaded++;
-            */
         } catch (Exception e) {
             System.err.print("Exception testing sound clips.");
             e.printStackTrace();
